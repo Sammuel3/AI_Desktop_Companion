@@ -1,36 +1,56 @@
 #include "WeatherService.h"
-#include "modules/logger/Logger.h"
 
 bool WeatherService::begin() {
     initialized_ = true;
-    hasWeatherData_ = false;
-    weatherText_ = "--";
-    temperatureText_ = "--°C";
-    statusText_ = "Weather: --";
-    Logger::info("WeatherService initialized");
     return true;
 }
 
 void WeatherService::update() {
-    // 当前保持空实现，不输出周期日志，避免刷屏。
+}
+
+void WeatherService::refresh(const String& weather,
+                              float temperature,
+                              const String& icon,
+                              const String& updateTime) {
+    weather_ = weather;
+    temperature_ = temperature;
+    weatherIcon_ = icon;
+    updateTime_ = updateTime;
+    weatherValid_ = true;
 }
 
 bool WeatherService::isInitialized() const {
     return initialized_;
 }
 
-bool WeatherService::hasWeatherData() const {
-    return hasWeatherData_;
+bool WeatherService::isWeatherValid() const {
+    return weatherValid_;
 }
 
-String WeatherService::getWeatherText() const {
-    return weatherText_;
+String WeatherService::getWeather() const {
+    if (!weatherValid_) {
+        return "--";
+    }
+    return weather_;
 }
 
-String WeatherService::getTemperatureText() const {
-    return temperatureText_;
+float WeatherService::getTemperature() const {
+    if (!weatherValid_) {
+        return 0.0f;
+    }
+    return temperature_;
 }
 
-String WeatherService::getStatusText() const {
-    return statusText_;
+String WeatherService::getWeatherIcon() const {
+    if (!weatherValid_) {
+        return "";
+    }
+    return weatherIcon_;
+}
+
+String WeatherService::getUpdateTime() const {
+    if (!weatherValid_) {
+        return "";
+    }
+    return updateTime_;
 }

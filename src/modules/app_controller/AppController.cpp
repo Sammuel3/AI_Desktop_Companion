@@ -38,23 +38,44 @@ void AppController::begin() {
     if (timeService_.begin()) {
         Logger::info("TimeService test passed");
     }
-    uiManager_.setHomeTimeText("--:--");
-    uiManager_.setHomeDateText("----/--/--");
+    // TODO: 临时测试代码 — 下一阶段（WiFiService / NTP 开发前）移除
+    timeService_.refresh("14:30", "2026/07/18");
+    String timeStr = timeService_.getTimeString();
+    String dateStr = timeService_.getDateString();
+    uiManager_.setHomeTimeText(timeStr.c_str());
+    uiManager_.setHomeDateText(dateStr.c_str());
 
     if (wifiService_.begin()) {
         Logger::info("WiFiService test passed");
     }
-    uiManager_.setHomeWifiText("WiFi: Disconnected");
+    if (configService_.hasWifiConfig()) {
+        wifiService_.connect(configService_.getWifiSsid(), configService_.getWifiPassword());
+        Logger::info(String("WiFi connecting to: ") + configService_.getWifiSsid());
+    }
+    {
+        String wifiText = wifiService_.isConnected()
+            ? String("WiFi: ") + wifiService_.getSSID()
+            : "WiFi: Disconnected";
+        uiManager_.setHomeWifiText(wifiText.c_str());
+    }
 
     if (batteryService_.begin()) {
         Logger::info("BatteryService test passed");
     }
-    uiManager_.setHomeBatteryText("Battery: --%");
+    {
+        String batteryText = String("Battery: ") + batteryService_.getPercentage() + "%";
+        uiManager_.setHomeBatteryText(batteryText.c_str());
+    }
 
     if (weatherService_.begin()) {
         Logger::info("WeatherService test passed");
     }
-    uiManager_.setHomeWeatherText("Weather: --");
+    {
+        String weatherText = weatherService_.isWeatherValid()
+            ? String(weatherService_.getWeather()) + " " + weatherService_.getTemperature() + "C"
+            : "Weather: --";
+        uiManager_.setHomeWeatherText(weatherText.c_str());
+    }
 
     if (sdCardService_.begin()) {
         Logger::info("SDCardService test passed");
@@ -102,5 +123,9 @@ void AppController::update() {
     if (millis() - lastPrint >= 2000) {
         lastPrint = millis();
         Logger::info("running...");
+        String wifiText = wifiService_.isConnected()
+            ? String("WiFi: ") + wifiService_.getSSID()
+            : "WiFi: Disconnected";
+        uiManager_.setHomeWifiText(wifiText.c_str());
     }
 }
