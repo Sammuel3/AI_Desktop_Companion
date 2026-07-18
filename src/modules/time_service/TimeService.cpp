@@ -1,17 +1,17 @@
 #include "TimeService.h"
-#include "modules/logger/Logger.h"
 
 bool TimeService::begin() {
     initialized_ = true;
-    timeValid_ = false;
-    timeString_ = "--:--";
-    dateString_ = "----/--/--";
-    Logger::info("TimeService initialized");
     return true;
 }
 
 void TimeService::update() {
-    // 当前保持空实现，不输出周期日志。
+}
+
+void TimeService::refresh(const String& timeString, const String& dateString) {
+    timeString_ = timeString;
+    dateString_ = dateString;
+    timeValid_ = true;
 }
 
 bool TimeService::isInitialized() const {
@@ -23,9 +23,15 @@ bool TimeService::isTimeValid() const {
 }
 
 String TimeService::getTimeString() const {
+    if (!timeValid_) {
+        return "--:--";
+    }
     return timeString_;
 }
 
 String TimeService::getDateString() const {
+    if (!timeValid_) {
+        return "----/--/--";
+    }
     return dateString_;
 }
