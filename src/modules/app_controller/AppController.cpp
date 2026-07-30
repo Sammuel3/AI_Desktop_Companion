@@ -88,6 +88,10 @@ void AppController::begin() {
     if (memoService_.begin()) {
         Logger::info("MemoService test passed");
     }
+    memoService_.setMemo("Test Memo");
+    if (memoService_.isMemoValid()) {
+        Logger::info(String("MemoService memo: ") + memoService_.getMemo());
+    }
 
     if (aiService_.begin()) {
         Logger::info("AIService test passed");
