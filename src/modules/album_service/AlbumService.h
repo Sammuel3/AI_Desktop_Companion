@@ -2,10 +2,10 @@
 
 #include <Arduino.h>
 
-/// @brief 相册服务模块 — 管理相册图片列表、当前图片索引和轮播状态。
+/// @brief 相册服务模块 — 管理本地相册资源。
 ///
-/// 当前阶段先使用占位状态。
-/// 后续会基于 SDCardService 扫描 TF 卡图片，并支持手机上传图片。
+/// AlbumService 仅负责管理图片资源列表及其状态。
+/// 不负责图片解码、渲染、LVGL 显示、SD 卡驱动、文件系统实现。
 
 class AlbumService {
 public:
@@ -13,38 +13,46 @@ public:
     /// @return true 成功。
     bool begin();
 
-    /// @brief 周期性更新（轮播定时器等）。
+    /// @brief 周期性更新。
     void update();
 
-    /// @brief 服务是否已初始化。
-    bool isInitialized() const;
-
-    /// @brief 是否有可用的图片。
-    bool hasImages() const;
-
-    /// @brief 获取图片总数。
-    int getImageCount() const;
-
-    /// @brief 获取当前图片索引。
-    int getCurrentIndex() const;
-
-    /// @brief 获取当前图片路径。
-    String getCurrentImagePath() const;
-
-    /// @brief 获取相册状态文本（用于 UI 显示）。
-    String getStatusText() const;
-
     /// @brief 切换到下一张图片。
-    void nextImage();
+    /// @return true 切换成功，false 无图片或只有一张图片。
+    bool nextImage();
 
     /// @brief 切换到上一张图片。
-    void previousImage();
+    /// @return true 切换成功，false 无图片或只有一张图片。
+    bool previousImage();
+
+    /// @brief 选择指定索引的图片。
+    /// @param index 图片索引（0-based）。
+    /// @return true 成功，false 索引越界或相册未就绪。
+    bool selectImage(size_t index);
+
+    /// @brief 服务是否已初始化。
+    /// @return true 已初始化，false 未初始化。
+    bool isInitialized() const;
+
+    /// @brief 相册是否已就绪（已扫描到图片）。
+    /// @return true 已就绪，false 无图片。
+    bool isAlbumReady() const;
+
+    /// @brief 获取图片总数。
+    /// @return 图片数量，未就绪时返回 0。
+    size_t getImageCount() const;
+
+    /// @brief 获取当前图片索引。
+    /// @return 当前索引（0-based），未就绪时返回 0。
+    size_t getCurrentIndex() const;
+
+    /// @brief 获取当前图片路径。
+    /// @return 路径字符串，未就绪时返回空字符串。
+    String getCurrentImagePath() const;
 
 private:
     bool initialized_ = false;
-    bool hasImages_ = false;
-    int imageCount_ = 0;
-    int currentIndex_ = -1;
+    bool albumReady_ = false;
+    size_t currentIndex_ = 0;
+    size_t imageCount_ = 0;
     String currentImagePath_ = "";
-    String statusText_ = "Album: No images";
 };

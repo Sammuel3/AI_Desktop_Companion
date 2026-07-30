@@ -1,55 +1,66 @@
 #include "AlbumService.h"
-#include "modules/logger/Logger.h"
 
 bool AlbumService::begin() {
     initialized_ = true;
-    hasImages_ = false;
-    imageCount_ = 0;
-    currentIndex_ = -1;
-    currentImagePath_ = "";
-    statusText_ = "Album: No images";
-    Logger::info("AlbumService initialized");
     return true;
 }
 
 void AlbumService::update() {
-    // 当前保持空实现，不输出周期日志，避免刷屏。
+}
+
+bool AlbumService::nextImage() {
+    if (!albumReady_ || imageCount_ <= 1) {
+        return false;
+    }
+
+    currentIndex_++;
+    if (currentIndex_ >= imageCount_) {
+        currentIndex_ = 0;
+    }
+    return true;
+}
+
+bool AlbumService::previousImage() {
+    if (!albumReady_ || imageCount_ <= 1) {
+        return false;
+    }
+
+    if (currentIndex_ == 0) {
+        currentIndex_ = imageCount_ - 1;
+    } else {
+        currentIndex_--;
+    }
+    return true;
+}
+
+bool AlbumService::selectImage(size_t index) {
+    if (!albumReady_ || index >= imageCount_) {
+        return false;
+    }
+
+    currentIndex_ = index;
+    return true;
 }
 
 bool AlbumService::isInitialized() const {
     return initialized_;
 }
 
-bool AlbumService::hasImages() const {
-    return hasImages_;
+bool AlbumService::isAlbumReady() const {
+    return albumReady_;
 }
 
-int AlbumService::getImageCount() const {
+size_t AlbumService::getImageCount() const {
     return imageCount_;
 }
 
-int AlbumService::getCurrentIndex() const {
+size_t AlbumService::getCurrentIndex() const {
     return currentIndex_;
 }
 
 String AlbumService::getCurrentImagePath() const {
+    if (!albumReady_) {
+        return "";
+    }
     return currentImagePath_;
-}
-
-String AlbumService::getStatusText() const {
-    return statusText_;
-}
-
-void AlbumService::nextImage() {
-    if (!hasImages_) {
-        return;
-    }
-    currentIndex_ = (currentIndex_ + 1) % imageCount_;
-}
-
-void AlbumService::previousImage() {
-    if (!hasImages_) {
-        return;
-    }
-    currentIndex_ = (currentIndex_ - 1 + imageCount_) % imageCount_;
 }
