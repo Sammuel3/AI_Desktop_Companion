@@ -15,8 +15,9 @@ void AppController::begin() {
     }
 
     // ---- Config (depends on Storage via NVS) ----
-    if (configService_.begin()) {
+    if (configService_.begin(&storageService_)) {
         Logger::info("ConfigService test passed");
+        Logger::info("ConfigService ready");
     }
 
     // ---- Core Services ----
@@ -37,8 +38,8 @@ void AppController::begin() {
         Logger::info("WiFiService test passed");
     }
     if (configService_.hasWifiConfig()) {
-        wifiService_.connect(configService_.getWifiSsid(), configService_.getWifiPassword());
-        Logger::info(String("WiFi connecting to: ") + configService_.getWifiSsid());
+        wifiService_.connect(configService_.getWifiSSID(), configService_.getWifiPassword());
+        Logger::info(String("WiFi connecting to: ") + configService_.getWifiSSID());
     }
     {
         String wifiText = wifiService_.isConnected()

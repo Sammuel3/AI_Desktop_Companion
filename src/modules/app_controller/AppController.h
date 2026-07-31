@@ -10,7 +10,7 @@
 #include "../time_service/TimeService.h"
 #include "../power_manager/PowerManager.h"
 #include "../wifi_service/WiFiService.h"
-#include "../config_service/ConfigService.h"
+#include "../config/ConfigService.h"
 #include "../battery_service/BatteryService.h"
 #include "../weather_service/WeatherService.h"
 #include "../sdcard_service/SDCardService.h"
