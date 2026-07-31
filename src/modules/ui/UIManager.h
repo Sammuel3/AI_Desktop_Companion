@@ -3,14 +3,21 @@
 #include <Arduino.h>
 #include "UIDataProvider.h"
 #include "screens/HomeScreen.h"
+#include "screens/MenuScreen.h"
 
-/// @brief UI 管理模块 — 负责 UI 生命周期管理与页面切换入口。
+/// @brief 屏幕类型枚举。
+enum class ScreenType {
+    HOME,
+    MENU
+};
+
+/// @brief UI 管理模块 — 负责 UI 生命周期管理与页面切换。
 ///
-/// UIManager 管理 HomeScreen 等 LVGL 页面，调度 UI 更新。
+/// UIManager 管理 HomeScreen 和 MenuScreen 等 LVGL 页面，调度 UI 更新。
 
 class UIManager {
 public:
-    /// @brief 初始化 UI 系统并创建默认页面。
+    /// @brief 初始化 UI 系统并创建所有页面。
     /// @param provider UIDataProvider 指针。
     /// @return true 成功。
     bool begin(UIDataProvider* provider);
@@ -18,15 +25,13 @@ public:
     /// @brief 周期性更新 UI（刷新当前页面）。
     void update();
 
-    /// @brief 切换到主屏幕。
-    void showHome();
+    /// @brief 切换到指定屏幕。
+    /// @param screen 目标屏幕类型。
+    void switchScreen(ScreenType screen);
 
-    /// @brief 刷新当前页面。
-    void refresh();
-
-    /// @brief 获取当前页面名称。
-    /// @return 当前页面名称字符串。
-    const char* getCurrentScreen() const;
+    /// @brief 获取当前屏幕类型。
+    /// @return 当前屏幕类型。
+    ScreenType getCurrentScreen() const;
 
     /// @brief UI 系统是否已初始化。
     /// @return true 已初始化。
@@ -34,6 +39,7 @@ public:
 
 private:
     bool initialized_ = false;
-    const char* currentScreen_ = "None";
+    ScreenType currentScreen_ = ScreenType::HOME;
     HomeScreen homeScreen_;
+    MenuScreen menuScreen_;
 };

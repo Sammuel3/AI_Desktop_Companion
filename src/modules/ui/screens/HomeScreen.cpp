@@ -48,11 +48,17 @@ bool HomeScreen::begin(UIDataProvider* provider) {
     lv_obj_set_style_text_color(wifiLabel_, lv_color_hex(0x8888ff), LV_PART_MAIN);
     lv_obj_align(wifiLabel_, LV_ALIGN_BOTTOM_MID, 0, -20);
 
-    // ---- Activate screen ----
-    lv_scr_load(screen_);
-
     Logger::info("HomeScreen initialized");
     return true;
+}
+
+void HomeScreen::show() {
+    if (screen_ != nullptr) {
+        lv_scr_load(screen_);
+    }
+}
+
+void HomeScreen::hide() {
 }
 
 void HomeScreen::update() {

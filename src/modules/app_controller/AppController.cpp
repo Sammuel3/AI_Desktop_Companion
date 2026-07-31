@@ -143,6 +143,10 @@ void AppController::begin() {
     if (uiManager_.begin(&uiDataProvider_)) {
         Logger::info("UIManager test passed");
     }
+    // Test menu switching
+    uiManager_.switchScreen(ScreenType::MENU);
+    uiManager_.switchScreen(ScreenType::HOME);
+    Logger::info("Menu switch test passed");
 }
 
 void AppController::update() {

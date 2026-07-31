@@ -10,7 +10,12 @@ bool UIManager::begin(UIDataProvider* provider) {
     if (homeScreen_.begin(provider)) {
         Logger::info("HomeScreen registered in UIManager");
     }
-    showHome();
+
+    if (menuScreen_.begin()) {
+        Logger::info("MenuScreen registered in UIManager");
+    }
+
+    switchScreen(ScreenType::HOME);
 
     initialized_ = true;
     Logger::info("UIManager initialized");
@@ -18,20 +23,47 @@ bool UIManager::begin(UIDataProvider* provider) {
 }
 
 void UIManager::update() {
-    homeScreen_.update();
+    switch (currentScreen_) {
+        case ScreenType::HOME:
+            homeScreen_.update();
+            break;
+        case ScreenType::MENU:
+            menuScreen_.update();
+            break;
+    }
 }
 
-void UIManager::showHome() {
-    currentScreen_ = "Home";
-    Logger::info("UI screen: Home");
+void UIManager::switchScreen(ScreenType screen) {
+    if (currentScreen_ == screen) {
+        return;
+    }
+
+    // Hide current screen
+    switch (currentScreen_) {
+        case ScreenType::HOME:
+            homeScreen_.hide();
+            break;
+        case ScreenType::MENU:
+            menuScreen_.hide();
+            break;
+    }
+
+    // Show target screen
+    switch (screen) {
+        case ScreenType::HOME:
+            homeScreen_.show();
+            Logger::info("UI screen: Home");
+            break;
+        case ScreenType::MENU:
+            menuScreen_.show();
+            Logger::info("UI screen: Menu");
+            break;
+    }
+
+    currentScreen_ = screen;
 }
 
-void UIManager::refresh() {
-    homeScreen_.update();
-    Logger::info("UI refresh triggered");
-}
-
-const char* UIManager::getCurrentScreen() const {
+ScreenType UIManager::getCurrentScreen() const {
     return currentScreen_;
 }
 

@@ -14,6 +14,12 @@ public:
     /// @return true 成功。
     bool begin(UIDataProvider* provider);
 
+    /// @brief 显示主屏幕（加载 LVGL 屏幕）。
+    void show();
+
+    /// @brief 隐藏主屏幕。
+    void hide();
+
     /// @brief 周期性刷新显示数据。
     void update();
 
