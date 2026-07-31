@@ -2,11 +2,10 @@
 
 #include <Arduino.h>
 
-/// @brief AI 聊天服务模块 — 维护 AI 聊天请求状态、用户输入和最近一次回复。
+/// @brief AI 服务模块 — 管理 AI 请求状态与返回结果。
 ///
-/// 当前阶段只做占位状态。
-/// 后续会在 WiFi 连接后调用中转 API 获取真实回复。
-/// API Key 不应硬编码在源码中。
+/// AIService 仅负责管理 AI 请求状态、保存返回结果、提供统一调用接口。
+/// 不负责 HTTP 请求、WebSocket、API Key 管理、JSON 解析、网络连接、UI 显示、语音输入输出。
 
 class AIService {
 public:
@@ -17,37 +16,34 @@ public:
     /// @brief 周期性更新。
     void update();
 
+    /// @brief 发送 AI 请求。
+    /// @param input 用户输入文本。
+    /// @return true 请求已受理，false 忙碌或未初始化。
+    bool request(const String& input);
+
     /// @brief 服务是否已初始化。
+    /// @return true 已初始化，false 未初始化。
     bool isInitialized() const;
 
     /// @brief AI 是否正在处理请求。
+    /// @return true 忙碌中，false 空闲。
     bool isBusy() const;
 
-    /// @brief 是否有待读取的回复。
-    bool hasReply() const;
+    /// @brief AI 返回结果是否有效。
+    /// @return true 有效，false 无效或已过期。
+    bool isResponseValid() const;
 
-    /// @brief 获取最近一次用户输入。
-    String getLastPrompt() const;
+    /// @brief 获取 AI 返回结果。
+    /// @return 返回文本，无效时返回空字符串。
+    String getResponse() const;
 
-    /// @brief 获取最近一次 AI 回复。
-    String getLastReply() const;
-
-    /// @brief 获取 AI 服务状态文本（用于 UI 显示）。
-    String getStatusText() const;
-
-    /// @brief 发送消息给 AI。
-    /// @param message 用户输入的消息。
-    /// @return true 请求已受理，false 当前忙碌或服务未初始化。
-    bool sendMessage(const char* message);
-
-    /// @brief 清空对话历史。
-    void clearConversation();
+    /// @brief 清除当前 AI 返回结果。
+    void clearResponse();
 
 private:
     bool initialized_ = false;
     bool busy_ = false;
-    bool hasReply_ = false;
-    String lastPrompt_ = "";
-    String lastReply_ = "";
-    String statusText_ = "AI: Idle";
+    bool responseValid_ = false;
+    String input_ = "";
+    String response_ = "";
 };

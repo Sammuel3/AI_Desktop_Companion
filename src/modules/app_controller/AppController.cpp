@@ -96,6 +96,10 @@ void AppController::begin() {
     if (aiService_.begin()) {
         Logger::info("AIService test passed");
     }
+    if (aiService_.request("Hello AI")) {
+        Logger::info(String("AIService request accepted, busy: ")
+            + (aiService_.isBusy() ? "true" : "false"));
+    }
 
     if (webServerService_.begin()) {
         Logger::info("WebServerService test passed");
