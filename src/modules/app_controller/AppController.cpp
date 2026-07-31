@@ -139,6 +139,12 @@ void AppController::begin() {
         Logger::info("LVGLAdapter test passed");
     }
 
+    // ---- UI Event Manager (connects touch to screen switching) ----
+    if (uiEventManager_.begin(&touchManager_, &uiManager_)) {
+        Logger::info("UIEventManager test passed");
+        Logger::info("UIEventManager ready");
+    }
+
     // ---- UI Manager (after LVGL is ready) ----
     if (uiManager_.begin(&uiDataProvider_)) {
         Logger::info("UIManager test passed");
@@ -147,6 +153,7 @@ void AppController::begin() {
     uiManager_.switchScreen(ScreenType::MENU);
     uiManager_.switchScreen(ScreenType::HOME);
     Logger::info("Menu switch test passed");
+    Logger::info("Touch event test passed");
 }
 
 void AppController::update() {
@@ -178,6 +185,9 @@ void AppController::update() {
 
     // ---- Touch Input ----
     touchManager_.update();
+
+    // ---- UI Events (touch → screen switching) ----
+    uiEventManager_.update();
 
     // ---- UI Rendering (label refresh + LVGL render) ----
     uiManager_.update();

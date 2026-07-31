@@ -4,6 +4,7 @@
 #include "../touch/TouchManager.h"
 #include "../display/LVGLAdapter.h"
 #include "../ui/UIDataProvider.h"
+#include "../ui/UIEventManager.h"
 #include "../ui/UIManager.h"
 #include "../time_service/TimeService.h"
 #include "../power_manager/PowerManager.h"
@@ -37,6 +38,7 @@ private:
     DisplayDriver displayDriver_;
     TouchManager touchManager_;
     LVGLAdapter lvglAdapter_;
+    UIEventManager uiEventManager_;
     UIManager uiManager_;
     TimeService timeService_;
     WiFiService wifiService_;
