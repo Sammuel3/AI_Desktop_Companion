@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../display/DisplayDriver.h"
+#include "../touch/TouchManager.h"
 #include "../display/LVGLAdapter.h"
 #include "../ui/UIDataProvider.h"
 #include "../ui/UIManager.h"
@@ -34,6 +35,7 @@ public:
 private:
     PowerManager powerManager_;
     DisplayDriver displayDriver_;
+    TouchManager touchManager_;
     LVGLAdapter lvglAdapter_;
     UIManager uiManager_;
     TimeService timeService_;

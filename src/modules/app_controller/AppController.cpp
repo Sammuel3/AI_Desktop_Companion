@@ -124,11 +124,17 @@ void AppController::begin() {
             + " | " + uiDataProvider_.getWifiText());
     }
 
-    // ---- Display & LVGL ----
+    // ---- Display & Touch ----
     if (displayDriver_.begin()) {
         Logger::info("DisplayDriver test passed");
     }
 
+    if (touchManager_.begin()) {
+        Logger::info("TouchManager test passed");
+        Logger::info("TouchManager ready");
+    }
+
+    // ---- LVGL ----
     if (lvglAdapter_.begin()) {
         Logger::info("LVGLAdapter test passed");
     }
@@ -165,6 +171,9 @@ void AppController::update() {
 
     // ---- UI Data (formatting) ----
     uiDataProvider_.update();
+
+    // ---- Touch Input ----
+    touchManager_.update();
 
     // ---- UI Rendering (label refresh + LVGL render) ----
     uiManager_.update();
