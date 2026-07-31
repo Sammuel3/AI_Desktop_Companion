@@ -6,6 +6,7 @@
 #include "../ui/UIDataProvider.h"
 #include "../ui/UIEventManager.h"
 #include "../ui/UIManager.h"
+#include "../ui/UIActionDispatcher.h"
 #include "../time_service/TimeService.h"
 #include "../power_manager/PowerManager.h"
 #include "../wifi_service/WiFiService.h"
@@ -40,6 +41,7 @@ private:
     LVGLAdapter lvglAdapter_;
     UIEventManager uiEventManager_;
     UIManager uiManager_;
+    UIActionDispatcher uiActionDispatcher_;
     TimeService timeService_;
     WiFiService wifiService_;
     ConfigService configService_;

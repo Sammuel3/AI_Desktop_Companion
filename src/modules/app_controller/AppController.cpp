@@ -149,6 +149,13 @@ void AppController::begin() {
     if (uiManager_.begin(&uiDataProvider_)) {
         Logger::info("UIManager test passed");
     }
+
+    // ---- UI Action Dispatcher ----
+    if (uiActionDispatcher_.begin(uiManager_.getActionManager())) {
+        Logger::info("UIActionDispatcher test passed");
+        Logger::info("UIActionDispatcher ready");
+    }
+
     // Test menu switching
     uiManager_.switchScreen(ScreenType::MENU);
     uiManager_.switchScreen(ScreenType::HOME);
@@ -201,6 +208,10 @@ void AppController::update() {
 
     // ---- UI Rendering (label refresh + LVGL render) ----
     uiManager_.update();
+
+    // ---- Action Dispatch (process queued UI actions) ----
+    uiActionDispatcher_.update();
+
     lvglAdapter_.update();
 
     static unsigned long lastPrint = 0;
