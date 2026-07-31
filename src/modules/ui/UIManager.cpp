@@ -11,7 +11,7 @@ bool UIManager::begin(UIDataProvider* provider) {
         Logger::info("HomeScreen registered in UIManager");
     }
 
-    if (menuScreen_.begin()) {
+    if (menuScreen_.begin(&uiActionManager_)) {
         Logger::info("MenuScreen registered in UIManager");
     }
 
@@ -65,6 +65,10 @@ void UIManager::switchScreen(ScreenType screen) {
 
 ScreenType UIManager::getCurrentScreen() const {
     return currentScreen_;
+}
+
+UIActionManager* UIManager::getActionManager() {
+    return &uiActionManager_;
 }
 
 bool UIManager::isInitialized() const {

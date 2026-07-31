@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 #include "UIDataProvider.h"
+#include "UIAction.h"
 #include "screens/HomeScreen.h"
 #include "screens/MenuScreen.h"
 
@@ -33,6 +34,10 @@ public:
     /// @return 当前屏幕类型。
     ScreenType getCurrentScreen() const;
 
+    /// @brief 获取 UIActionManager 指针。
+    /// @return UIActionManager 指针。
+    UIActionManager* getActionManager();
+
     /// @brief UI 系统是否已初始化。
     /// @return true 已初始化。
     bool isInitialized() const;
@@ -40,6 +45,7 @@ public:
 private:
     bool initialized_ = false;
     ScreenType currentScreen_ = ScreenType::HOME;
+    UIActionManager uiActionManager_;
     HomeScreen homeScreen_;
     MenuScreen menuScreen_;
 };

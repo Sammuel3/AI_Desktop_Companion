@@ -154,6 +154,16 @@ void AppController::begin() {
     uiManager_.switchScreen(ScreenType::HOME);
     Logger::info("Menu switch test passed");
     Logger::info("Touch event test passed");
+
+    // Test UIActionManager
+    UIActionManager* actionMgr = uiManager_.getActionManager();
+    if (actionMgr != nullptr) {
+        Logger::info("UIActionManager initialized");
+        actionMgr->setAction(UIAction::OPEN_ABOUT);
+        Logger::info(String("Menu action test: ") + String(static_cast<int>(actionMgr->getAction())));
+        actionMgr->clearAction();
+        Logger::info("Menu item action test passed");
+    }
 }
 
 void AppController::update() {
