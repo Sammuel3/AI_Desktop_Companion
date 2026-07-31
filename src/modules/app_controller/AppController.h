@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../display_manager/DisplayManager.h"
-#include "../touch_manager/TouchManager.h"
-#include "../lvgl_port/LVGLPort.h"
-#include "../ui_manager/UIManager.h"
+#include "../display/DisplayDriver.h"
+#include "../display/LVGLAdapter.h"
+#include "../ui/UIDataProvider.h"
+#include "../ui/UIManager.h"
 #include "../time_service/TimeService.h"
 #include "../power_manager/PowerManager.h"
 #include "../wifi_service/WiFiService.h"
@@ -16,6 +16,8 @@
 #include "../ai_service/AIService.h"
 #include "../web_server_service/WebServerService.h"
 #include "../ota_service/OTAService.h"
+#include "../storage/StorageService.h"
+#include "../system_status/SystemStatusManager.h"
 
 /// @brief 应用控制器 — 统一管理启动流程与主循环调度。
 ///
@@ -30,10 +32,9 @@ public:
     void update();
 
 private:
-    DisplayManager displayManager_;
     PowerManager powerManager_;
-    TouchManager touchManager_;
-    LVGLPort lvglPort_;
+    DisplayDriver displayDriver_;
+    LVGLAdapter lvglAdapter_;
     UIManager uiManager_;
     TimeService timeService_;
     WiFiService wifiService_;
@@ -46,4 +47,7 @@ private:
     AIService aiService_;
     WebServerService webServerService_;
     OTAService otaService_;
+    StorageService storageService_;
+    SystemStatusManager systemStatusManager_;
+    UIDataProvider uiDataProvider_;
 };

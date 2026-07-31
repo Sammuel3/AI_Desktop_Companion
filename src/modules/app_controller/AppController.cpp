@@ -1,7 +1,6 @@
 #include "AppController.h"
 #include "../logger/Logger.h"
 #include "../board_config/BoardConfig.h"
-#include "../screen_base/ScreenBase.h"
 #include <Arduino.h>
 
 void AppController::begin() {
@@ -10,29 +9,19 @@ void AppController::begin() {
     Logger::info(String("Screen: ") + BoardConfig::SCREEN_WIDTH + "x" + BoardConfig::SCREEN_HEIGHT);
     Logger::info("AppController started");
 
+    // ---- Storage Layer ----
+    if (storageService_.begin()) {
+        Logger::info("StorageService test passed");
+    }
+
+    // ---- Config (depends on Storage via NVS) ----
     if (configService_.begin()) {
         Logger::info("ConfigService test passed");
     }
 
-    if (displayManager_.begin()) {
-        Logger::info("DisplayManager test passed");
-    }
-    displayManager_.setBrightness(configService_.getBrightness());
-
+    // ---- Core Services ----
     if (powerManager_.begin()) {
         Logger::info("PowerManager test passed");
-    }
-
-    if (touchManager_.begin()) {
-        Logger::info("TouchManager test passed");
-    }
-
-    if (lvglPort_.begin()) {
-        Logger::info("LVGLPort test passed");
-    }
-
-    if (uiManager_.begin()) {
-        Logger::info("UIManager test passed");
     }
 
     if (timeService_.begin()) {
@@ -42,8 +31,7 @@ void AppController::begin() {
     timeService_.refresh("14:30", "2026/07/18");
     String timeStr = timeService_.getTimeString();
     String dateStr = timeService_.getDateString();
-    uiManager_.setHomeTimeText(timeStr.c_str());
-    uiManager_.setHomeDateText(dateStr.c_str());
+    // TODO: Re-enable UI data binding when UIManager supports screens
 
     if (wifiService_.begin()) {
         Logger::info("WiFiService test passed");
@@ -56,7 +44,7 @@ void AppController::begin() {
         String wifiText = wifiService_.isConnected()
             ? String("WiFi: ") + wifiService_.getSSID()
             : "WiFi: Disconnected";
-        uiManager_.setHomeWifiText(wifiText.c_str());
+        // TODO: uiManager_.setHomeWifiText(wifiText.c_str());
     }
 
     if (batteryService_.begin()) {
@@ -64,7 +52,7 @@ void AppController::begin() {
     }
     {
         String batteryText = String("Battery: ") + batteryService_.getPercentage() + "%";
-        uiManager_.setHomeBatteryText(batteryText.c_str());
+        // TODO: uiManager_.setHomeBatteryText(batteryText.c_str());
     }
 
     if (weatherService_.begin()) {
@@ -74,7 +62,7 @@ void AppController::begin() {
         String weatherText = weatherService_.isWeatherValid()
             ? String(weatherService_.getWeather()) + " " + weatherService_.getTemperature() + "C"
             : "Weather: --";
-        uiManager_.setHomeWeatherText(weatherText.c_str());
+        // TODO: uiManager_.setHomeWeatherText(weatherText.c_str());
     }
 
     if (sdCardService_.begin()) {
@@ -104,6 +92,7 @@ void AppController::begin() {
     if (webServerService_.begin()) {
         Logger::info("WebServerService test passed");
     }
+    webServerService_.setSystemStatusManager(systemStatusManager_);
     if (webServerService_.start()) {
         Logger::info(String("WebServerService started, running: ")
             + (webServerService_.isRunning() ? "true" : "false"));
@@ -112,14 +101,46 @@ void AppController::begin() {
     if (otaService_.begin()) {
         Logger::info("OTAService test passed");
     }
+
+    // ---- System Status ----
+    systemStatusManager_.begin();
+    systemStatusManager_.setWifiStatus(wifiService_.isConnected());
+    systemStatusManager_.setBatteryLevel(batteryService_.getPercentage());
+    systemStatusManager_.setTime(timeStr);
+    systemStatusManager_.setWebServerStatus(webServerService_.isRunning());
+    {
+        SystemStatus status = systemStatusManager_.getStatus();
+        Logger::info(String("SystemStatus: WiFi=") + (status.wifiConnected ? "ON" : "OFF")
+            + " Battery=" + String(status.batteryLevel) + "%"
+            + " Time=" + status.currentTime
+            + " WebServer=" + (status.webServerRunning ? "ON" : "OFF"));
+    }
+
+    // ---- UI Data Provider ----
+    if (uiDataProvider_.begin(&systemStatusManager_)) {
+        Logger::info("UIDataProvider test passed");
+        Logger::info(String("UIDataProvider: ") + uiDataProvider_.getTimeText()
+            + " | " + uiDataProvider_.getBatteryText()
+            + " | " + uiDataProvider_.getWifiText());
+    }
+
+    // ---- Display & LVGL ----
+    if (displayDriver_.begin()) {
+        Logger::info("DisplayDriver test passed");
+    }
+
+    if (lvglAdapter_.begin()) {
+        Logger::info("LVGLAdapter test passed");
+    }
+
+    // ---- UI Manager (after LVGL is ready) ----
+    if (uiManager_.begin(&uiDataProvider_)) {
+        Logger::info("UIManager test passed");
+    }
 }
 
 void AppController::update() {
-    displayManager_.update();
-    powerManager_.update();
-    touchManager_.update();
-    lvglPort_.update();
-    uiManager_.update();
+    // ---- Services (data producers) ----
     timeService_.update();
     wifiService_.update();
     batteryService_.update();
@@ -130,14 +151,36 @@ void AppController::update() {
     aiService_.update();
     webServerService_.update();
     otaService_.update();
+    powerManager_.update();
+
+    // ---- System Status (data aggregation) ----
+    systemStatusManager_.setWifiStatus(wifiService_.isConnected());
+    systemStatusManager_.setBatteryLevel(batteryService_.getPercentage());
+    systemStatusManager_.setTime(timeService_.getTimeString());
+    if (weatherService_.isWeatherValid()) {
+        systemStatusManager_.setWeather(weatherService_.getWeather(),
+                                        weatherService_.getTemperature());
+    }
+    systemStatusManager_.setWebServerStatus(webServerService_.isRunning());
+
+    // ---- UI Data (formatting) ----
+    uiDataProvider_.update();
+
+    // ---- UI Rendering (label refresh + LVGL render) ----
+    uiManager_.update();
+    lvglAdapter_.update();
 
     static unsigned long lastPrint = 0;
     if (millis() - lastPrint >= 2000) {
         lastPrint = millis();
-        Logger::info("running...");
+        SystemStatus status = systemStatusManager_.getStatus();
+        Logger::info(String("SystemStatus: WiFi=") + (status.wifiConnected ? "ON" : "OFF")
+            + " Battery=" + String(status.batteryLevel) + "%"
+            + " Time=" + status.currentTime
+            + " WebServer=" + (status.webServerRunning ? "ON" : "OFF"));
         String wifiText = wifiService_.isConnected()
             ? String("WiFi: ") + wifiService_.getSSID()
             : "WiFi: Disconnected";
-        uiManager_.setHomeWifiText(wifiText.c_str());
+        // TODO: uiManager_.setHomeWifiText(wifiText.c_str());
     }
 }
