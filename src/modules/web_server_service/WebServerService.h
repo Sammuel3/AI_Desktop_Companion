@@ -2,10 +2,10 @@
 
 #include <Arduino.h>
 
-/// @brief 手机配置页服务模块 — 管理手机 Web 配置页服务状态。
+/// @brief Web 服务模块 — 管理 WebServer 服务状态。
 ///
-/// 当前阶段只做占位状态。
-/// 后续会在 WiFi 连接后启动 WebServer，并提供配置页、文件上传和设备设置接口。
+/// WebServerService 仅负责管理服务状态、提供启动/停止接口。
+/// 不负责 HTTP 路由、HTML 页面、WiFi 连接、REST API、JSON 解析、OTA 上传、文件系统、UI 显示。
 
 class WebServerService {
 public:
@@ -16,28 +16,22 @@ public:
     /// @brief 周期性更新。
     void update();
 
-    /// @brief 服务是否已初始化。
-    bool isInitialized() const;
-
-    /// @brief WebServer 是否正在运行。
-    bool isRunning() const;
-
-    /// @brief 获取监听端口。
-    uint16_t getPort() const;
-
-    /// @brief 获取 Web 服务状态文本（用于 UI 显示）。
-    String getStatusText() const;
-
     /// @brief 启动 WebServer。
-    /// @return true 启动成功。
+    /// @return true 启动成功，false 未初始化。
     bool start();
 
     /// @brief 停止 WebServer。
     void stop();
 
+    /// @brief 服务是否已初始化。
+    /// @return true 已初始化，false 未初始化。
+    bool isInitialized() const;
+
+    /// @brief WebServer 是否正在运行。
+    /// @return true 运行中，false 已停止。
+    bool isRunning() const;
+
 private:
     bool initialized_ = false;
     bool running_ = false;
-    uint16_t port_ = 80;
-    String statusText_ = "Web: Stopped";
 };

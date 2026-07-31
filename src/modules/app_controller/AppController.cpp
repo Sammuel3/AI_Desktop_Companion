@@ -104,6 +104,10 @@ void AppController::begin() {
     if (webServerService_.begin()) {
         Logger::info("WebServerService test passed");
     }
+    if (webServerService_.start()) {
+        Logger::info(String("WebServerService started, running: ")
+            + (webServerService_.isRunning() ? "true" : "false"));
+    }
 
     if (otaService_.begin()) {
         Logger::info("OTAService test passed");
