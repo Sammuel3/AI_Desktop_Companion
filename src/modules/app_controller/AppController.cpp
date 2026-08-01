@@ -64,12 +64,16 @@ void AppController::begin() {
     albumService_.scanImages();
     Logger::info(String("AlbumService image count: ") + String(albumService_.getImageCount()));
 
-    if (memoService_.begin()) {
+    if (memoService_.begin(&storageService_)) {
         Logger::info("MemoService test passed");
+        Logger::info("MemoService ready");
     }
-    memoService_.setMemo("Test Memo");
-    if (memoService_.isMemoValid()) {
-        Logger::info(String("MemoService memo: ") + memoService_.getMemo());
+    memoService_.addMemo("Test", "Hello");
+    Logger::info(String("MemoService count: ") + String(memoService_.getMemoCount()));
+    if (memoService_.getMemoCount() == 1) {
+        Logger::info(String("MemoService title: ") + memoService_.getMemoTitle(0));
+        memoService_.removeMemo(0);
+        Logger::info(String("MemoService after remove count: ") + String(memoService_.getMemoCount()));
     }
 
     if (aiService_.begin()) {
