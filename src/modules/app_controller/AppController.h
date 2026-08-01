@@ -16,7 +16,7 @@
 #include "../sdcard/SDCardService.h"
 #include "../album/AlbumService.h"
 #include "../memo/MemoService.h"
-#include "../ai_service/AIService.h"
+#include "../ai/AIService.h"
 #include "../web_server_service/WebServerService.h"
 #include "../ota_service/OTAService.h"
 #include "../storage/StorageService.h"
