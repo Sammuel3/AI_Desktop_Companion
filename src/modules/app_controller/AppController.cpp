@@ -54,6 +54,7 @@ void AppController::begin() {
 
     if (sdCardService_.begin()) {
         Logger::info("SDCardService test passed");
+        Logger::info("SDCardService ready");
     }
 
     if (albumService_.begin()) {
