@@ -8,6 +8,7 @@
 #include "screens/MenuScreen.h"
 #include "screens/SettingsScreen.h"
 #include "screens/AboutScreen.h"
+#include "screens/WeatherScreen.h"
 
 /// @brief UI 管理模块 — 负责 UI 生命周期管理与页面切换。
 ///
@@ -21,7 +22,8 @@ public:
         HOME,
         MENU,
         SETTINGS,
-        ABOUT
+        ABOUT,
+        WEATHER
     };
 
     /// @brief 构造 UI 管理器。
@@ -56,4 +58,5 @@ private:
     MenuScreen menuScreen_;
     SettingsScreen settingsScreen_;
     AboutScreen aboutScreen_;
+    WeatherScreen weatherScreen_;
 };

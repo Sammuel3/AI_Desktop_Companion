@@ -31,6 +31,7 @@ void UIActionDispatcher::update() {
     switch (action) {
         case UIAction::OPEN_WEATHER:
             Logger::info("Action: Weather");
+            uiManager_->switchScreen(UIManager::ScreenType::WEATHER);
             break;
         case UIAction::OPEN_ALBUM:
             Logger::info("Action: Album");

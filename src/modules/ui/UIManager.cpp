@@ -25,6 +25,9 @@ bool UIManager::begin(UIDataProvider* provider, SettingsService* settings) {
     aboutScreen_.begin(provider);
     Logger::info("AboutScreen registered in UIManager");
 
+    weatherScreen_.begin(provider);
+    Logger::info("WeatherScreen registered in UIManager");
+
     switchScreen(ScreenType::HOME);
 
     initialized_ = true;
@@ -45,6 +48,9 @@ void UIManager::update() {
             break;
         case ScreenType::ABOUT:
             aboutScreen_.update();
+            break;
+        case ScreenType::WEATHER:
+            weatherScreen_.update();
             break;
     }
 }
@@ -68,6 +74,9 @@ void UIManager::switchScreen(UIManager::ScreenType screen) {
         case ScreenType::ABOUT:
             aboutScreen_.hide();
             break;
+        case ScreenType::WEATHER:
+            weatherScreen_.hide();
+            break;
     }
 
     // Show target screen
@@ -87,6 +96,10 @@ void UIManager::switchScreen(UIManager::ScreenType screen) {
         case ScreenType::ABOUT:
             aboutScreen_.show();
             Logger::info("UI screen: About");
+            break;
+        case ScreenType::WEATHER:
+            weatherScreen_.show();
+            Logger::info("UI screen: Weather");
             break;
     }
 
