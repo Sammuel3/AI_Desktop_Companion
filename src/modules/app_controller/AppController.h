@@ -9,7 +9,7 @@
 #include "../ui/UIActionDispatcher.h"
 #include "../time/TimeService.h"
 #include "../power/PowerManager.h"
-#include "../wifi_service/WiFiService.h"
+#include "../wifi/WiFiService.h"
 #include "../config/ConfigService.h"
 #include "../battery_service/BatteryService.h"
 #include "../weather_service/WeatherService.h"

@@ -26,20 +26,21 @@ void AppController::begin() {
         Logger::info("PowerManager ready");
     }
 
+    if (wifiService_.begin(&configService_)) {
+        Logger::info("WiFiService test passed");
+        Logger::info("WiFiService ready");
+    }
+    if (configService_.hasWifiConfig()) {
+        wifiService_.connect();
+        Logger::info(String("WiFi connecting to: ") + configService_.getWifiSSID());
+    }
+
     if (timeService_.begin()) {
         Logger::info("TimeService test passed");
         Logger::info("TimeService ready");
     }
     String timeStr = timeService_.getTimeString();
     // TODO: Re-enable UI data binding when UIManager supports screens
-
-    if (wifiService_.begin()) {
-        Logger::info("WiFiService test passed");
-    }
-    if (configService_.hasWifiConfig()) {
-        wifiService_.connect(configService_.getWifiSSID(), configService_.getWifiPassword());
-        Logger::info(String("WiFi connecting to: ") + configService_.getWifiSSID());
-    }
 
     if (batteryService_.begin()) {
         Logger::info("BatteryService test passed");
