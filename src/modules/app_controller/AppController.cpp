@@ -49,6 +49,7 @@ void AppController::begin() {
 
     if (weatherService_.begin()) {
         Logger::info("WeatherService test passed");
+        Logger::info("WeatherService ready");
     }
 
     if (sdCardService_.begin()) {

@@ -12,7 +12,7 @@
 #include "../wifi/WiFiService.h"
 #include "../config/ConfigService.h"
 #include "../battery/BatteryService.h"
-#include "../weather_service/WeatherService.h"
+#include "../weather/WeatherService.h"
 #include "../sdcard_service/SDCardService.h"
 #include "../album_service/AlbumService.h"
 #include "../memo_service/MemoService.h"
