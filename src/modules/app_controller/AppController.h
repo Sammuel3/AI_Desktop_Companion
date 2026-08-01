@@ -21,6 +21,7 @@
 #include "../web_server/WebServerService.h"
 #include "../ota/OTAService.h"
 #include "../storage/StorageService.h"
+#include "../notification/NotificationService.h"
 #include "../system_status/SystemStatusManager.h"
 
 /// @brief 应用控制器 — 统一管理启动流程与主循环调度。
@@ -57,5 +58,6 @@ private:
     OTAService otaService_;
     StorageService storageService_;
     SystemStatusManager systemStatusManager_;
+    NotificationService notificationService_;
     UIDataProvider uiDataProvider_;
 };

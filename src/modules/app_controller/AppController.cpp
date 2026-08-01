@@ -123,6 +123,13 @@ void AppController::begin() {
             + " WebServer=" + (webServerService_.isRunning() ? "ON" : "OFF"));
     }
 
+    // ---- Notification Service ----
+    notificationService_.begin();
+    notificationService_.notify("Test notification");
+    Logger::info(String("Notification test: ") + notificationService_.getMessage());
+    notificationService_.clear();
+    Logger::info("NotificationService ready");
+
     // ---- UI Data Provider ----
     if (uiDataProvider_.begin(&systemStatusManager_)) {
         Logger::info("UIDataProvider test passed");
@@ -205,6 +212,7 @@ void AppController::update() {
                                         weatherService_.getTemperature());
     }
     systemStatusManager_.setWebServerStatus(webServerService_.isRunning());
+    notificationService_.update();
 
     // ---- UI Data (formatting) ----
     uiDataProvider_.update();
