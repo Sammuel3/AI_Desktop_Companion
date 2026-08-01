@@ -11,7 +11,7 @@
 #include "../power/PowerManager.h"
 #include "../wifi/WiFiService.h"
 #include "../config/ConfigService.h"
-#include "../battery_service/BatteryService.h"
+#include "../battery/BatteryService.h"
 #include "../weather_service/WeatherService.h"
 #include "../sdcard_service/SDCardService.h"
 #include "../album_service/AlbumService.h"

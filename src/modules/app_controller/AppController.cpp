@@ -35,16 +35,17 @@ void AppController::begin() {
         Logger::info(String("WiFi connecting to: ") + configService_.getWifiSSID());
     }
 
+    if (batteryService_.begin()) {
+        Logger::info("BatteryService test passed");
+        Logger::info("BatteryService ready");
+    }
+
     if (timeService_.begin()) {
         Logger::info("TimeService test passed");
         Logger::info("TimeService ready");
     }
     String timeStr = timeService_.getTimeString();
     // TODO: Re-enable UI data binding when UIManager supports screens
-
-    if (batteryService_.begin()) {
-        Logger::info("BatteryService test passed");
-    }
 
     if (weatherService_.begin()) {
         Logger::info("WeatherService test passed");
@@ -160,9 +161,9 @@ void AppController::begin() {
 
 void AppController::update() {
     // ---- Services (data producers) ----
-    timeService_.update();
     wifiService_.update();
     batteryService_.update();
+    timeService_.update();
     weatherService_.update();
     sdCardService_.update();
     albumService_.update();
