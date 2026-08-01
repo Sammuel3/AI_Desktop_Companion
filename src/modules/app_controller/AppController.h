@@ -11,6 +11,7 @@
 #include "../power/PowerManager.h"
 #include "../wifi/WiFiService.h"
 #include "../config/ConfigService.h"
+#include "../settings/SettingsService.h"
 #include "../battery/BatteryService.h"
 #include "../weather/WeatherService.h"
 #include "../sdcard/SDCardService.h"
@@ -45,6 +46,7 @@ private:
     TimeService timeService_;
     WiFiService wifiService_;
     ConfigService configService_;
+    SettingsService settingsService_;
     BatteryService batteryService_;
     WeatherService weatherService_;
     SDCardService sdCardService_;

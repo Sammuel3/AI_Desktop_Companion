@@ -57,15 +57,26 @@ public:
     /// @return 亮度（0-100）。
     int getBrightness();
 
+    // ---- WiFi 自动连接 ----
+
+    /// @brief 设置 WiFi 自动连接开关。
+    /// @param enabled true 启用。
+    void setAutoConnect(bool enabled);
+
+    /// @brief 获取 WiFi 自动连接状态。
+    /// @return true 已启用。
+    bool getAutoConnect();
+
     /// @brief 服务是否已初始化。
     /// @return true 已初始化。
     bool isInitialized() const;
 
 private:
-    static constexpr const char* KEY_WIFI_SSID     = "wifi_ssid";
-    static constexpr const char* KEY_WIFI_PASSWORD = "wifi_password";
-    static constexpr const char* KEY_DEVICE_NAME  = "device_name";
-    static constexpr const char* KEY_BRIGHTNESS    = "brightness";
+    static constexpr const char* KEY_WIFI_SSID      = "wifi_ssid";
+    static constexpr const char* KEY_WIFI_PASSWORD  = "wifi_password";
+    static constexpr const char* KEY_DEVICE_NAME    = "device_name";
+    static constexpr const char* KEY_BRIGHTNESS     = "brightness";
+    static constexpr const char* KEY_AUTO_CONNECT   = "wifi_auto_connect";
 
     StorageService* storage_ = nullptr;
     bool initialized_ = false;

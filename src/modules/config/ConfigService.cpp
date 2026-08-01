@@ -67,6 +67,19 @@ int ConfigService::getBrightness() {
     return val.toInt();
 }
 
+// ---- Auto Connect ----
+
+void ConfigService::setAutoConnect(bool enabled) {
+    if (!initialized_) return;
+    storage_->setString(KEY_AUTO_CONNECT, enabled ? "1" : "0");
+}
+
+bool ConfigService::getAutoConnect() {
+    if (!initialized_) return true;
+    String val = storage_->getString(KEY_AUTO_CONNECT, "1");
+    return val == "1";
+}
+
 bool ConfigService::isInitialized() const {
     return initialized_;
 }

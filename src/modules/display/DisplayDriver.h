@@ -17,9 +17,17 @@ public:
     /// @param enable true 开启，false 关闭。
     void setBacklight(bool enable);
 
+    /// @brief 显示驱动是否已初始化。
+    /// @return true 已初始化。
+    bool isInitialized() const;
+
     /// @brief 显示驱动是否就绪（LCD 已初始化且触摸可用）。
     /// @return true 就绪，false 未就绪。
     bool isReady() const;
+
+    /// @brief 获取 ESP_Panel 引用。
+    /// @return ESP_Panel 引用。
+    static class ESP_Panel& getPanel();
 
     /// @brief 获取屏幕宽度。
     /// @return 宽度（像素）。

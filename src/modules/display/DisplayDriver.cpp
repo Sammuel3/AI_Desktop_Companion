@@ -43,8 +43,16 @@ void DisplayDriver::setBacklight(bool enable) {
     }
 }
 
+bool DisplayDriver::isInitialized() const {
+    return initialized_;
+}
+
 bool DisplayDriver::isReady() const {
     return initialized_ && touchReady_;
+}
+
+ESP_Panel& DisplayDriver::getPanel() {
+    return PanelContext::getPanel();
 }
 
 uint16_t DisplayDriver::getWidth() const {

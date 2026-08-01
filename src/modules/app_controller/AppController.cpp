@@ -20,6 +20,14 @@ void AppController::begin() {
         Logger::info("ConfigService ready");
     }
 
+    // ---- Settings (depends on Config) ----
+    if (settingsService_.begin(&configService_)) {
+        Logger::info("SettingsService test passed");
+        settingsService_.setBrightness(50);
+        Logger::info(String("Settings brightness test: ") + String(settingsService_.getBrightness()));
+        Logger::info("SettingsService ready");
+    }
+
     // ---- Core Services ----
     if (powerManager_.begin()) {
         Logger::info("PowerManager test passed");
@@ -174,6 +182,7 @@ void AppController::begin() {
 
 void AppController::update() {
     // ---- Services (data producers) ----
+    settingsService_.update();
     wifiService_.update();
     batteryService_.update();
     timeService_.update();
