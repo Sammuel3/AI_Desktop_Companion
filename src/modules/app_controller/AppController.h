@@ -14,7 +14,7 @@
 #include "../battery/BatteryService.h"
 #include "../weather/WeatherService.h"
 #include "../sdcard/SDCardService.h"
-#include "../album_service/AlbumService.h"
+#include "../album/AlbumService.h"
 #include "../memo_service/MemoService.h"
 #include "../ai_service/AIService.h"
 #include "../web_server_service/WebServerService.h"

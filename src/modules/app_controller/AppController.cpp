@@ -57,9 +57,12 @@ void AppController::begin() {
         Logger::info("SDCardService ready");
     }
 
-    if (albumService_.begin()) {
+    if (albumService_.begin(&sdCardService_)) {
         Logger::info("AlbumService test passed");
+        Logger::info("AlbumService ready");
     }
+    albumService_.scanImages();
+    Logger::info(String("AlbumService image count: ") + String(albumService_.getImageCount()));
 
     if (memoService_.begin()) {
         Logger::info("MemoService test passed");
