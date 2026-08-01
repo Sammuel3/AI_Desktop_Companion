@@ -4,7 +4,7 @@
 UIManager::UIManager() {
 }
 
-bool UIManager::begin(UIDataProvider* provider) {
+bool UIManager::begin(UIDataProvider* provider, SettingsService* settings) {
     if (provider == nullptr) {
         Logger::error("UIManager: UIDataProvider is null");
         return false;
@@ -17,6 +17,13 @@ bool UIManager::begin(UIDataProvider* provider) {
     if (menuScreen_.begin(&uiActionManager_)) {
         Logger::info("MenuScreen registered in UIManager");
     }
+
+    if (settings != nullptr && settingsScreen_.begin(settings)) {
+        Logger::info("SettingsScreen registered in UIManager");
+    }
+
+    aboutScreen_.begin(provider);
+    Logger::info("AboutScreen registered in UIManager");
 
     switchScreen(ScreenType::HOME);
 
@@ -32,6 +39,12 @@ void UIManager::update() {
             break;
         case ScreenType::MENU:
             menuScreen_.update();
+            break;
+        case ScreenType::SETTINGS:
+            settingsScreen_.update();
+            break;
+        case ScreenType::ABOUT:
+            aboutScreen_.update();
             break;
     }
 }
@@ -49,6 +62,12 @@ void UIManager::switchScreen(UIManager::ScreenType screen) {
         case ScreenType::MENU:
             menuScreen_.hide();
             break;
+        case ScreenType::SETTINGS:
+            settingsScreen_.hide();
+            break;
+        case ScreenType::ABOUT:
+            aboutScreen_.hide();
+            break;
     }
 
     // Show target screen
@@ -60,6 +79,14 @@ void UIManager::switchScreen(UIManager::ScreenType screen) {
         case ScreenType::MENU:
             menuScreen_.show();
             Logger::info("UI screen: Menu");
+            break;
+        case ScreenType::SETTINGS:
+            settingsScreen_.show();
+            Logger::info("UI screen: Settings");
+            break;
+        case ScreenType::ABOUT:
+            aboutScreen_.show();
+            Logger::info("UI screen: About");
             break;
     }
 

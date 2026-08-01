@@ -160,12 +160,12 @@ void AppController::begin() {
     }
 
     // ---- UI Manager (after LVGL is ready) ----
-    if (uiManager_.begin(&uiDataProvider_)) {
+    if (uiManager_.begin(&uiDataProvider_, &settingsService_)) {
         Logger::info("UIManager test passed");
     }
 
     // ---- UI Action Dispatcher ----
-    if (uiActionDispatcher_.begin(uiManager_.getActionManager())) {
+    if (uiActionDispatcher_.begin(uiManager_.getActionManager(), &uiManager_)) {
         Logger::info("UIActionDispatcher test passed");
         Logger::info("UIActionDispatcher ready");
     }
