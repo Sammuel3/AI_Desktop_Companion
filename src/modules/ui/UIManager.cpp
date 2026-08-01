@@ -1,6 +1,9 @@
 #include "UIManager.h"
 #include "../logger/Logger.h"
 
+UIManager::UIManager() {
+}
+
 bool UIManager::begin(UIDataProvider* provider) {
     if (provider == nullptr) {
         Logger::error("UIManager: UIDataProvider is null");
@@ -33,7 +36,7 @@ void UIManager::update() {
     }
 }
 
-void UIManager::switchScreen(ScreenType screen) {
+void UIManager::switchScreen(UIManager::ScreenType screen) {
     if (currentScreen_ == screen) {
         return;
     }
@@ -63,7 +66,7 @@ void UIManager::switchScreen(ScreenType screen) {
     currentScreen_ = screen;
 }
 
-ScreenType UIManager::getCurrentScreen() const {
+UIManager::ScreenType UIManager::getCurrentScreen() const {
     return currentScreen_;
 }
 

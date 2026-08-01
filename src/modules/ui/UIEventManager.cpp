@@ -1,6 +1,9 @@
 #include "UIEventManager.h"
 #include "../logger/Logger.h"
 
+UIEventManager::UIEventManager() {
+}
+
 bool UIEventManager::begin(TouchManager* touchManager, UIManager* uiManager) {
     if (touchManager == nullptr) {
         Logger::error("UIEventManager: TouchManager is null");
@@ -14,6 +17,7 @@ bool UIEventManager::begin(TouchManager* touchManager, UIManager* uiManager) {
     touchManager_ = touchManager;
     uiManager_ = uiManager;
     wasTouched_ = false;
+    initialized_ = true;
 
     Logger::info("UIEventManager initialized");
     return true;
@@ -28,13 +32,17 @@ void UIEventManager::update() {
 
     // Rising edge detection — switch on touch press, not hold
     if (isTouched && !wasTouched_) {
-        ScreenType current = uiManager_->getCurrentScreen();
-        if (current == ScreenType::HOME) {
-            uiManager_->switchScreen(ScreenType::MENU);
+        UIManager::ScreenType current = uiManager_->getCurrentScreen();
+        if (current == UIManager::ScreenType::HOME) {
+            uiManager_->switchScreen(UIManager::ScreenType::MENU);
         } else {
-            uiManager_->switchScreen(ScreenType::HOME);
+            uiManager_->switchScreen(UIManager::ScreenType::HOME);
         }
     }
 
     wasTouched_ = isTouched;
+}
+
+bool UIEventManager::isInitialized() const {
+    return initialized_;
 }

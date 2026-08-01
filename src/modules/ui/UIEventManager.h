@@ -6,10 +6,13 @@
 /// @brief UI 事件管理器 — 连接 TouchManager 输入与 UIManager 页面切换。
 ///
 /// UIEventManager 监听触摸事件并触发页面切换。
-/// 不直接访问 GT911 硬件、LVGL 控件或业务 Service。
+/// 不直接访问 GT911、LVGL 控件、HomeScreen、MenuScreen、DisplayDriver 或任何 Service。
 
 class UIEventManager {
 public:
+    /// @brief 构造 UI 事件管理器。
+    UIEventManager();
+
     /// @brief 初始化并绑定 TouchManager 和 UIManager。
     /// @param touchManager TouchManager 指针。
     /// @param uiManager UIManager 指针。
@@ -19,7 +22,12 @@ public:
     /// @brief 周期性检查触摸事件并触发页面切换。
     void update();
 
+    /// @brief 是否已初始化。
+    /// @return true 已初始化。
+    bool isInitialized() const;
+
 private:
+    bool initialized_ = false;
     TouchManager* touchManager_ = nullptr;
     UIManager* uiManager_ = nullptr;
     bool wasTouched_ = false;

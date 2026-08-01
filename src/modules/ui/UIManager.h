@@ -6,18 +6,22 @@
 #include "screens/HomeScreen.h"
 #include "screens/MenuScreen.h"
 
-/// @brief 屏幕类型枚举。
-enum class ScreenType {
-    HOME,
-    MENU
-};
-
 /// @brief UI 管理模块 — 负责 UI 生命周期管理与页面切换。
 ///
 /// UIManager 管理 HomeScreen 和 MenuScreen 等 LVGL 页面，调度 UI 更新。
+/// 不直接访问任何 Service、Hardware、Touch、Display、SystemStatusManager。
 
 class UIManager {
 public:
+    /// @brief 屏幕类型枚举。
+    enum class ScreenType {
+        HOME,
+        MENU
+    };
+
+    /// @brief 构造 UI 管理器。
+    UIManager();
+
     /// @brief 初始化 UI 系统并创建所有页面。
     /// @param provider UIDataProvider 指针。
     /// @return true 成功。

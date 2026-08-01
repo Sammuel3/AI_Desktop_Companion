@@ -17,8 +17,8 @@
 #include "../album/AlbumService.h"
 #include "../memo/MemoService.h"
 #include "../ai/AIService.h"
-#include "../web_server_service/WebServerService.h"
-#include "../ota_service/OTAService.h"
+#include "../web_server/WebServerService.h"
+#include "../ota/OTAService.h"
 #include "../storage/StorageService.h"
 #include "../system_status/SystemStatusManager.h"
 

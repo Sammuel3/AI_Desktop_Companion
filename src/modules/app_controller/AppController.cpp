@@ -87,36 +87,40 @@ void AppController::begin() {
     if (webServerService_.begin()) {
         Logger::info("WebServerService test passed");
     }
-    webServerService_.setSystemStatusManager(systemStatusManager_);
     if (webServerService_.start()) {
-        Logger::info(String("WebServerService started, running: ")
-            + (webServerService_.isRunning() ? "true" : "false"));
+        Logger::info(String("WebServerService test passed: ") + webServerService_.getStatusJson());
     }
+    Logger::info("WebServerService ready");
 
     if (otaService_.begin()) {
         Logger::info("OTAService test passed");
     }
+    if (otaService_.startUpdate()) {
+        Logger::info(String("OTAService test passed: progress=") + String(otaService_.getProgress()));
+        otaService_.stopUpdate();
+    }
+    Logger::info("OTAService ready");
 
     // ---- System Status ----
     systemStatusManager_.begin();
     systemStatusManager_.setWifiStatus(wifiService_.isConnected());
     systemStatusManager_.setBatteryLevel(batteryService_.getPercentage());
+    systemStatusManager_.setCharging(batteryService_.isCharging());
     systemStatusManager_.setTime(timeStr);
     systemStatusManager_.setWebServerStatus(webServerService_.isRunning());
     {
-        SystemStatus status = systemStatusManager_.getStatus();
-        Logger::info(String("SystemStatus: WiFi=") + (status.wifiConnected ? "ON" : "OFF")
-            + " Battery=" + String(status.batteryLevel) + "%"
-            + " Time=" + status.currentTime
-            + " WebServer=" + (status.webServerRunning ? "ON" : "OFF"));
+        Logger::info(String("SystemStatus: WiFi=") + (systemStatusManager_.isWifiConnected() ? "ON" : "OFF")
+            + " Battery=" + String(systemStatusManager_.getBatteryLevel()) + "%"
+            + " Time=" + systemStatusManager_.getTime()
+            + " WebServer=" + (webServerService_.isRunning() ? "ON" : "OFF"));
     }
 
     // ---- UI Data Provider ----
     if (uiDataProvider_.begin(&systemStatusManager_)) {
         Logger::info("UIDataProvider test passed");
-        Logger::info(String("UIDataProvider: ") + uiDataProvider_.getTimeText()
-            + " | " + uiDataProvider_.getBatteryText()
-            + " | " + uiDataProvider_.getWifiText());
+        Logger::info(String("UIDataProvider: time=") + uiDataProvider_.getTime()
+            + " battery=" + String(uiDataProvider_.getBatteryLevel()) + "%"
+            + " wifi=" + (uiDataProvider_.isWifiConnected() ? "ON" : "OFF"));
     }
 
     // ---- Display & Touch ----
@@ -152,8 +156,8 @@ void AppController::begin() {
     }
 
     // Test menu switching
-    uiManager_.switchScreen(ScreenType::MENU);
-    uiManager_.switchScreen(ScreenType::HOME);
+    uiManager_.switchScreen(UIManager::ScreenType::MENU);
+    uiManager_.switchScreen(UIManager::ScreenType::HOME);
     Logger::info("Menu switch test passed");
     Logger::info("Touch event test passed");
 
@@ -185,6 +189,7 @@ void AppController::update() {
     // ---- System Status (data aggregation) ----
     systemStatusManager_.setWifiStatus(wifiService_.isConnected());
     systemStatusManager_.setBatteryLevel(batteryService_.getPercentage());
+    systemStatusManager_.setCharging(batteryService_.isCharging());
     systemStatusManager_.setTime(timeService_.getTimeString());
     if (weatherService_.isWeatherValid()) {
         systemStatusManager_.setWeather(weatherService_.getWeather(),
@@ -212,10 +217,9 @@ void AppController::update() {
     static unsigned long lastPrint = 0;
     if (millis() - lastPrint >= 2000) {
         lastPrint = millis();
-        SystemStatus status = systemStatusManager_.getStatus();
-        Logger::info(String("SystemStatus: WiFi=") + (status.wifiConnected ? "ON" : "OFF")
-            + " Battery=" + String(status.batteryLevel) + "%"
-            + " Time=" + status.currentTime
-            + " WebServer=" + (status.webServerRunning ? "ON" : "OFF"));
+        Logger::info(String("SystemStatus: WiFi=") + (systemStatusManager_.isWifiConnected() ? "ON" : "OFF")
+            + " Battery=" + String(systemStatusManager_.getBatteryLevel()) + "%"
+            + " Time=" + systemStatusManager_.getTime()
+            + " WebServer=" + (webServerService_.isRunning() ? "ON" : "OFF"));
     }
 }
