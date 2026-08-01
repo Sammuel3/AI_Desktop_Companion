@@ -8,7 +8,7 @@
 #include "../ui/UIManager.h"
 #include "../ui/UIActionDispatcher.h"
 #include "../time_service/TimeService.h"
-#include "../power_manager/PowerManager.h"
+#include "../power/PowerManager.h"
 #include "../wifi_service/WiFiService.h"
 #include "../config/ConfigService.h"
 #include "../battery_service/BatteryService.h"

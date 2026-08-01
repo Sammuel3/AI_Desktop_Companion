@@ -23,6 +23,7 @@ void AppController::begin() {
     // ---- Core Services ----
     if (powerManager_.begin()) {
         Logger::info("PowerManager test passed");
+        Logger::info("PowerManager ready");
     }
 
     if (timeService_.begin()) {
@@ -31,7 +32,6 @@ void AppController::begin() {
     // TODO: 临时测试代码 — 下一阶段（WiFiService / NTP 开发前）移除
     timeService_.refresh("14:30", "2026/07/18");
     String timeStr = timeService_.getTimeString();
-    String dateStr = timeService_.getDateString();
     // TODO: Re-enable UI data binding when UIManager supports screens
 
     if (wifiService_.begin()) {
@@ -41,29 +41,13 @@ void AppController::begin() {
         wifiService_.connect(configService_.getWifiSSID(), configService_.getWifiPassword());
         Logger::info(String("WiFi connecting to: ") + configService_.getWifiSSID());
     }
-    {
-        String wifiText = wifiService_.isConnected()
-            ? String("WiFi: ") + wifiService_.getSSID()
-            : "WiFi: Disconnected";
-        // TODO: uiManager_.setHomeWifiText(wifiText.c_str());
-    }
 
     if (batteryService_.begin()) {
         Logger::info("BatteryService test passed");
     }
-    {
-        String batteryText = String("Battery: ") + batteryService_.getPercentage() + "%";
-        // TODO: uiManager_.setHomeBatteryText(batteryText.c_str());
-    }
 
     if (weatherService_.begin()) {
         Logger::info("WeatherService test passed");
-    }
-    {
-        String weatherText = weatherService_.isWeatherValid()
-            ? String(weatherService_.getWeather()) + " " + weatherService_.getTemperature() + "C"
-            : "Weather: --";
-        // TODO: uiManager_.setHomeWeatherText(weatherText.c_str());
     }
 
     if (sdCardService_.begin()) {
@@ -223,9 +207,5 @@ void AppController::update() {
             + " Battery=" + String(status.batteryLevel) + "%"
             + " Time=" + status.currentTime
             + " WebServer=" + (status.webServerRunning ? "ON" : "OFF"));
-        String wifiText = wifiService_.isConnected()
-            ? String("WiFi: ") + wifiService_.getSSID()
-            : "WiFi: Disconnected";
-        // TODO: uiManager_.setHomeWifiText(wifiText.c_str());
     }
 }
