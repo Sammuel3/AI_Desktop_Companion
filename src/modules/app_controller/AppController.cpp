@@ -28,9 +28,8 @@ void AppController::begin() {
 
     if (timeService_.begin()) {
         Logger::info("TimeService test passed");
+        Logger::info("TimeService ready");
     }
-    // TODO: 临时测试代码 — 下一阶段（WiFiService / NTP 开发前）移除
-    timeService_.refresh("14:30", "2026/07/18");
     String timeStr = timeService_.getTimeString();
     // TODO: Re-enable UI data binding when UIManager supports screens
 
