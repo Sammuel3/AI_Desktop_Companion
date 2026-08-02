@@ -132,6 +132,7 @@ void AppController::begin() {
 
     // ---- UI Data Provider ----
     if (uiDataProvider_.begin(&systemStatusManager_)) {
+        uiDataProvider_.setNotificationService(&notificationService_);
         Logger::info("UIDataProvider test passed");
         Logger::info(String("UIDataProvider: time=") + uiDataProvider_.getTime()
             + " battery=" + String(uiDataProvider_.getBatteryLevel()) + "%"

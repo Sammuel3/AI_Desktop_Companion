@@ -6,6 +6,7 @@ enum class UIAction {
     OPEN_WEATHER,
     OPEN_ALBUM,
     OPEN_SETTINGS,
+    OPEN_NOTIFICATION,
     OPEN_TIME,
     OPEN_MEMO,
     OPEN_ABOUT

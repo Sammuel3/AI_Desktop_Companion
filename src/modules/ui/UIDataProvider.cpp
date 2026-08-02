@@ -58,6 +58,25 @@ String UIDataProvider::getDeviceName() const {
     return "SmartDesktop";
 }
 
+void UIDataProvider::setNotificationService(NotificationService* notification) {
+    notification_ = notification;
+}
+
+bool UIDataProvider::hasNotification() const {
+    if (notification_ == nullptr) return false;
+    return notification_->hasNotification();
+}
+
+int UIDataProvider::getNotificationCount() const {
+    if (notification_ == nullptr) return 0;
+    return notification_->hasNotification() ? 1 : 0;
+}
+
+String UIDataProvider::getNotificationMessage() const {
+    if (notification_ == nullptr) return "";
+    return notification_->getMessage();
+}
+
 // ---- 格式化文本 ----
 
 String UIDataProvider::getBatteryText() {

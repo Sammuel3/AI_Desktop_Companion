@@ -33,6 +33,7 @@ private:
     lv_obj_t* itemWeather_ = nullptr;
     lv_obj_t* itemAlbum_ = nullptr;
     lv_obj_t* itemSettings_ = nullptr;
+    lv_obj_t* itemNotification_ = nullptr;
     lv_obj_t* itemTime_ = nullptr;
     lv_obj_t* itemMemo_ = nullptr;
     lv_obj_t* itemAbout_ = nullptr;

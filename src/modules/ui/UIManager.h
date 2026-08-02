@@ -13,6 +13,7 @@
 #include "screens/WeatherScreen.h"
 #include "screens/AlbumScreen.h"
 #include "screens/TimeScreen.h"
+#include "screens/NotificationScreen.h"
 #include "screens/MemoScreen.h"
 
 /// @brief UI 管理模块 — 负责 UI 生命周期管理与页面切换。
@@ -30,6 +31,7 @@ public:
         ABOUT,
         WEATHER,
         ALBUM,
+        NOTIFICATION,
         TIME,
         MEMO
     };
@@ -71,4 +73,5 @@ private:
     AlbumScreen albumScreen_;
     MemoScreen memoScreen_;
     TimeScreen timeScreen_;
+    NotificationScreen notificationScreen_;
 };

@@ -17,11 +17,19 @@ bool MenuScreen::begin(UIActionManager* actionManager) {
     lv_obj_set_style_text_color(titleLabel_, lv_color_hex(0x00d4ff), LV_PART_MAIN);
     lv_obj_align(titleLabel_, LV_ALIGN_TOP_MID, 0, 20);
 
+    // Notification
+    itemNotification_ = lv_label_create(screen_);
+    lv_label_set_text(itemNotification_, "Notification");
+    lv_obj_set_style_text_color(itemNotification_, lv_color_hex(0xffffff), LV_PART_MAIN);
+    lv_obj_align(itemNotification_, LV_ALIGN_CENTER, 0, -80);
+    lv_obj_add_flag(itemNotification_, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_add_event_cb(itemNotification_, onItemClicked, LV_EVENT_CLICKED, this);
+
     // Time
     itemTime_ = lv_label_create(screen_);
     lv_label_set_text(itemTime_, "Time");
-    lv_obj_set_style_text_color(itemTime_, lv_color_hex(0xffffff), LV_PART_MAIN);
-    lv_obj_align(itemTime_, LV_ALIGN_CENTER, 0, -80);
+    lv_obj_set_style_text_color(itemTime_, lv_color_hex(0xcccccc), LV_PART_MAIN);
+    lv_obj_align(itemTime_, LV_ALIGN_CENTER, 0, -54);
     lv_obj_add_flag(itemTime_, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_add_event_cb(itemTime_, onItemClicked, LV_EVENT_CLICKED, this);
 
@@ -29,7 +37,7 @@ bool MenuScreen::begin(UIActionManager* actionManager) {
     itemWeather_ = lv_label_create(screen_);
     lv_label_set_text(itemWeather_, "Weather");
     lv_obj_set_style_text_color(itemWeather_, lv_color_hex(0xcccccc), LV_PART_MAIN);
-    lv_obj_align(itemWeather_, LV_ALIGN_CENTER, 0, -48);
+    lv_obj_align(itemWeather_, LV_ALIGN_CENTER, 0, -27);
     lv_obj_add_flag(itemWeather_, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_add_event_cb(itemWeather_, onItemClicked, LV_EVENT_CLICKED, this);
 
@@ -37,7 +45,7 @@ bool MenuScreen::begin(UIActionManager* actionManager) {
     itemAlbum_ = lv_label_create(screen_);
     lv_label_set_text(itemAlbum_, "Album");
     lv_obj_set_style_text_color(itemAlbum_, lv_color_hex(0xcccccc), LV_PART_MAIN);
-    lv_obj_align(itemAlbum_, LV_ALIGN_CENTER, 0, -16);
+    lv_obj_align(itemAlbum_, LV_ALIGN_CENTER, 0, 0);
     lv_obj_add_flag(itemAlbum_, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_add_event_cb(itemAlbum_, onItemClicked, LV_EVENT_CLICKED, this);
 
@@ -45,7 +53,7 @@ bool MenuScreen::begin(UIActionManager* actionManager) {
     itemMemo_ = lv_label_create(screen_);
     lv_label_set_text(itemMemo_, "Memo");
     lv_obj_set_style_text_color(itemMemo_, lv_color_hex(0xcccccc), LV_PART_MAIN);
-    lv_obj_align(itemMemo_, LV_ALIGN_CENTER, 0, 16);
+    lv_obj_align(itemMemo_, LV_ALIGN_CENTER, 0, 27);
     lv_obj_add_flag(itemMemo_, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_add_event_cb(itemMemo_, onItemClicked, LV_EVENT_CLICKED, this);
 
@@ -53,7 +61,7 @@ bool MenuScreen::begin(UIActionManager* actionManager) {
     itemSettings_ = lv_label_create(screen_);
     lv_label_set_text(itemSettings_, "Settings");
     lv_obj_set_style_text_color(itemSettings_, lv_color_hex(0xcccccc), LV_PART_MAIN);
-    lv_obj_align(itemSettings_, LV_ALIGN_CENTER, 0, 48);
+    lv_obj_align(itemSettings_, LV_ALIGN_CENTER, 0, 54);
     lv_obj_add_flag(itemSettings_, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_add_event_cb(itemSettings_, onItemClicked, LV_EVENT_CLICKED, this);
 
@@ -86,7 +94,10 @@ void MenuScreen::onItemClicked(lv_event_t* event) {
     MenuScreen* self = static_cast<MenuScreen*>(lv_event_get_user_data(event));
     if (self == nullptr || self->actionManager_ == nullptr) return;
 
-    if (target == self->itemTime_) {
+    if (target == self->itemNotification_) {
+        self->actionManager_->setAction(UIAction::OPEN_NOTIFICATION);
+        Logger::info("Menu action: OPEN_NOTIFICATION");
+    } else if (target == self->itemTime_) {
         self->actionManager_->setAction(UIAction::OPEN_TIME);
         Logger::info("Menu action: OPEN_TIME");
     } else if (target == self->itemWeather_) {

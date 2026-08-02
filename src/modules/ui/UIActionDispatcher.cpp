@@ -41,6 +41,10 @@ void UIActionDispatcher::update() {
             Logger::info("Action: Settings");
             uiManager_->switchScreen(UIManager::ScreenType::SETTINGS);
             break;
+        case UIAction::OPEN_NOTIFICATION:
+            Logger::info("Action: Notification");
+            uiManager_->switchScreen(UIManager::ScreenType::NOTIFICATION);
+            break;
         case UIAction::OPEN_TIME:
             Logger::info("Action: Time");
             uiManager_->switchScreen(UIManager::ScreenType::TIME);

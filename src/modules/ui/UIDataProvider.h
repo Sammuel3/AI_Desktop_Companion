@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 #include "../system_status/SystemStatusManager.h"
+#include "../notification/NotificationService.h"
 
 /// @brief UI 数据提供层 — 从 SystemStatusManager 读取状态，提供格式化与原始数据接口。
 ///
@@ -44,6 +45,18 @@ public:
     /// @brief 获取设备名称。
     String getDeviceName() const;
 
+    /// @brief 注入 NotificationService 依赖。
+    void setNotificationService(NotificationService* notification);
+
+    /// @brief 是否有待处理通知。
+    bool hasNotification() const;
+
+    /// @brief 获取通知数量。
+    int getNotificationCount() const;
+
+    /// @brief 获取最新通知消息。
+    String getNotificationMessage() const;
+
     // ---- 格式化文本 (backward compatible) ----
 
     /// @brief 获取格式化的电池文本。
@@ -67,5 +80,6 @@ public:
 private:
     bool initialized_ = false;
     SystemStatusManager* status_ = nullptr;
+    NotificationService* notification_ = nullptr;
     SystemStatus cachedStatus_;
 };

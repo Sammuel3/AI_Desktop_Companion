@@ -40,6 +40,9 @@ bool UIManager::begin(UIDataProvider* provider, SettingsService* settings, Album
     timeScreen_.begin(provider);
     Logger::info("TimeScreen registered in UIManager");
 
+    notificationScreen_.begin(provider);
+    Logger::info("NotificationScreen registered in UIManager");
+
     switchScreen(ScreenType::HOME);
 
     initialized_ = true;
@@ -69,6 +72,9 @@ void UIManager::update() {
             break;
         case ScreenType::MEMO:
             memoScreen_.update();
+            break;
+        case ScreenType::NOTIFICATION:
+            notificationScreen_.update();
             break;
         case ScreenType::TIME:
             timeScreen_.update();
@@ -104,6 +110,9 @@ void UIManager::switchScreen(UIManager::ScreenType screen) {
         case ScreenType::MEMO:
             memoScreen_.hide();
             break;
+        case ScreenType::NOTIFICATION:
+            notificationScreen_.hide();
+            break;
         case ScreenType::TIME:
             timeScreen_.hide();
             break;
@@ -138,6 +147,10 @@ void UIManager::switchScreen(UIManager::ScreenType screen) {
         case ScreenType::MEMO:
             memoScreen_.show();
             Logger::info("UI screen: Memo");
+            break;
+        case ScreenType::NOTIFICATION:
+            notificationScreen_.show();
+            Logger::info("UI screen: Notification");
             break;
         case ScreenType::TIME:
             timeScreen_.show();
