@@ -35,10 +35,19 @@ void UIActionDispatcher::update() {
             break;
         case UIAction::OPEN_ALBUM:
             Logger::info("Action: Album");
+            uiManager_->switchScreen(UIManager::ScreenType::ALBUM);
             break;
         case UIAction::OPEN_SETTINGS:
             Logger::info("Action: Settings");
             uiManager_->switchScreen(UIManager::ScreenType::SETTINGS);
+            break;
+        case UIAction::OPEN_TIME:
+            Logger::info("Action: Time");
+            uiManager_->switchScreen(UIManager::ScreenType::TIME);
+            break;
+        case UIAction::OPEN_MEMO:
+            Logger::info("Action: Memo");
+            uiManager_->switchScreen(UIManager::ScreenType::MEMO);
             break;
         case UIAction::OPEN_ABOUT:
             Logger::info("Action: About");

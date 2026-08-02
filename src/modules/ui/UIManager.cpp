@@ -4,7 +4,7 @@
 UIManager::UIManager() {
 }
 
-bool UIManager::begin(UIDataProvider* provider, SettingsService* settings) {
+bool UIManager::begin(UIDataProvider* provider, SettingsService* settings, AlbumService* album, MemoService* memo) {
     if (provider == nullptr) {
         Logger::error("UIManager: UIDataProvider is null");
         return false;
@@ -27,6 +27,18 @@ bool UIManager::begin(UIDataProvider* provider, SettingsService* settings) {
 
     weatherScreen_.begin(provider);
     Logger::info("WeatherScreen registered in UIManager");
+
+    if (album != nullptr && albumScreen_.begin(album)) {
+        Logger::info("AlbumScreen registered in UIManager");
+    }
+
+    if (memo != nullptr) {
+        memoScreen_.begin(memo);
+        Logger::info("MemoScreen registered in UIManager");
+    }
+
+    timeScreen_.begin(provider);
+    Logger::info("TimeScreen registered in UIManager");
 
     switchScreen(ScreenType::HOME);
 
@@ -51,6 +63,15 @@ void UIManager::update() {
             break;
         case ScreenType::WEATHER:
             weatherScreen_.update();
+            break;
+        case ScreenType::ALBUM:
+            albumScreen_.update();
+            break;
+        case ScreenType::MEMO:
+            memoScreen_.update();
+            break;
+        case ScreenType::TIME:
+            timeScreen_.update();
             break;
     }
 }
@@ -77,6 +98,15 @@ void UIManager::switchScreen(UIManager::ScreenType screen) {
         case ScreenType::WEATHER:
             weatherScreen_.hide();
             break;
+        case ScreenType::ALBUM:
+            albumScreen_.hide();
+            break;
+        case ScreenType::MEMO:
+            memoScreen_.hide();
+            break;
+        case ScreenType::TIME:
+            timeScreen_.hide();
+            break;
     }
 
     // Show target screen
@@ -100,6 +130,18 @@ void UIManager::switchScreen(UIManager::ScreenType screen) {
         case ScreenType::WEATHER:
             weatherScreen_.show();
             Logger::info("UI screen: Weather");
+            break;
+        case ScreenType::ALBUM:
+            albumScreen_.show();
+            Logger::info("UI screen: Album");
+            break;
+        case ScreenType::MEMO:
+            memoScreen_.show();
+            Logger::info("UI screen: Memo");
+            break;
+        case ScreenType::TIME:
+            timeScreen_.show();
+            Logger::info("UI screen: Time");
             break;
     }
 

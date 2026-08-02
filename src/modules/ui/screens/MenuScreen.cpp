@@ -8,45 +8,60 @@ bool MenuScreen::begin(UIActionManager* actionManager) {
     }
     actionManager_ = actionManager;
 
-    // ---- Create screen ----
     screen_ = lv_obj_create(NULL);
     lv_obj_set_style_bg_color(screen_, lv_color_hex(0x1a1a2e), LV_PART_MAIN);
 
-    // ---- Title ----
+    // Title
     titleLabel_ = lv_label_create(screen_);
     lv_label_set_text(titleLabel_, "MENU");
     lv_obj_set_style_text_color(titleLabel_, lv_color_hex(0x00d4ff), LV_PART_MAIN);
     lv_obj_align(titleLabel_, LV_ALIGN_TOP_MID, 0, 20);
 
-    // ---- Weather ----
+    // Time
+    itemTime_ = lv_label_create(screen_);
+    lv_label_set_text(itemTime_, "Time");
+    lv_obj_set_style_text_color(itemTime_, lv_color_hex(0xffffff), LV_PART_MAIN);
+    lv_obj_align(itemTime_, LV_ALIGN_CENTER, 0, -80);
+    lv_obj_add_flag(itemTime_, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_add_event_cb(itemTime_, onItemClicked, LV_EVENT_CLICKED, this);
+
+    // Weather
     itemWeather_ = lv_label_create(screen_);
     lv_label_set_text(itemWeather_, "Weather");
-    lv_obj_set_style_text_color(itemWeather_, lv_color_hex(0xffffff), LV_PART_MAIN);
-    lv_obj_align(itemWeather_, LV_ALIGN_CENTER, 0, -60);
+    lv_obj_set_style_text_color(itemWeather_, lv_color_hex(0xcccccc), LV_PART_MAIN);
+    lv_obj_align(itemWeather_, LV_ALIGN_CENTER, 0, -48);
     lv_obj_add_flag(itemWeather_, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_add_event_cb(itemWeather_, onItemClicked, LV_EVENT_CLICKED, this);
 
-    // ---- Album ----
+    // Album
     itemAlbum_ = lv_label_create(screen_);
     lv_label_set_text(itemAlbum_, "Album");
     lv_obj_set_style_text_color(itemAlbum_, lv_color_hex(0xcccccc), LV_PART_MAIN);
-    lv_obj_align(itemAlbum_, LV_ALIGN_CENTER, 0, -20);
+    lv_obj_align(itemAlbum_, LV_ALIGN_CENTER, 0, -16);
     lv_obj_add_flag(itemAlbum_, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_add_event_cb(itemAlbum_, onItemClicked, LV_EVENT_CLICKED, this);
 
-    // ---- Settings ----
+    // Memo
+    itemMemo_ = lv_label_create(screen_);
+    lv_label_set_text(itemMemo_, "Memo");
+    lv_obj_set_style_text_color(itemMemo_, lv_color_hex(0xcccccc), LV_PART_MAIN);
+    lv_obj_align(itemMemo_, LV_ALIGN_CENTER, 0, 16);
+    lv_obj_add_flag(itemMemo_, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_add_event_cb(itemMemo_, onItemClicked, LV_EVENT_CLICKED, this);
+
+    // Settings
     itemSettings_ = lv_label_create(screen_);
     lv_label_set_text(itemSettings_, "Settings");
     lv_obj_set_style_text_color(itemSettings_, lv_color_hex(0xcccccc), LV_PART_MAIN);
-    lv_obj_align(itemSettings_, LV_ALIGN_CENTER, 0, 20);
+    lv_obj_align(itemSettings_, LV_ALIGN_CENTER, 0, 48);
     lv_obj_add_flag(itemSettings_, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_add_event_cb(itemSettings_, onItemClicked, LV_EVENT_CLICKED, this);
 
-    // ---- About ----
+    // About
     itemAbout_ = lv_label_create(screen_);
     lv_label_set_text(itemAbout_, "About");
     lv_obj_set_style_text_color(itemAbout_, lv_color_hex(0xcccccc), LV_PART_MAIN);
-    lv_obj_align(itemAbout_, LV_ALIGN_CENTER, 0, 60);
+    lv_obj_align(itemAbout_, LV_ALIGN_CENTER, 0, 80);
     lv_obj_add_flag(itemAbout_, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_add_event_cb(itemAbout_, onItemClicked, LV_EVENT_CLICKED, this);
 
@@ -69,16 +84,20 @@ void MenuScreen::update() {
 void MenuScreen::onItemClicked(lv_event_t* event) {
     lv_obj_t* target = lv_event_get_target(event);
     MenuScreen* self = static_cast<MenuScreen*>(lv_event_get_user_data(event));
-    if (self == nullptr || self->actionManager_ == nullptr) {
-        return;
-    }
+    if (self == nullptr || self->actionManager_ == nullptr) return;
 
-    if (target == self->itemWeather_) {
+    if (target == self->itemTime_) {
+        self->actionManager_->setAction(UIAction::OPEN_TIME);
+        Logger::info("Menu action: OPEN_TIME");
+    } else if (target == self->itemWeather_) {
         self->actionManager_->setAction(UIAction::OPEN_WEATHER);
         Logger::info("Menu action: OPEN_WEATHER");
     } else if (target == self->itemAlbum_) {
         self->actionManager_->setAction(UIAction::OPEN_ALBUM);
         Logger::info("Menu action: OPEN_ALBUM");
+    } else if (target == self->itemMemo_) {
+        self->actionManager_->setAction(UIAction::OPEN_MEMO);
+        Logger::info("Menu action: OPEN_MEMO");
     } else if (target == self->itemSettings_) {
         self->actionManager_->setAction(UIAction::OPEN_SETTINGS);
         Logger::info("Menu action: OPEN_SETTINGS");

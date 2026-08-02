@@ -160,7 +160,7 @@ void AppController::begin() {
     }
 
     // ---- UI Manager (after LVGL is ready) ----
-    if (uiManager_.begin(&uiDataProvider_, &settingsService_)) {
+    if (uiManager_.begin(&uiDataProvider_, &settingsService_, &albumService_, &memoService_)) {
         Logger::info("UIManager test passed");
     }
 
